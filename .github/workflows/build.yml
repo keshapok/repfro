@@ -1,0 +1,20 @@
+name: Build Windows .exe
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest  # Сборка под Windows!
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0  # или ваша версия .NET
+    - name: Publish Single File
+      run: dotnet publish -c Release --self-contained -p:PublishSingleFile=true -r win-x64
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: bot.exe
+        path: bin/Release/net*/win-x64/publish/*.exe
